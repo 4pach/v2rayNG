@@ -168,23 +168,8 @@ class GroupServerFragment : BaseFragment<FragmentGroupServerBinding>(),
      * @param profile The server configuration
      */
     private fun editServer(guid: String, profile: ProfileItem) {
-        val intent = Intent().putExtra("guid", guid)
-            .putExtra("isRunning", mainViewModel.isRunning.value)
-            .putExtra("createConfigType", profile.configType.value)
-            .putExtra("subscriptionId", subId)
-        when (profile.configType) {
-            EConfigType.CUSTOM -> {
-                ownerActivity.startActivity(intent.setClass(ownerActivity, ServerCustomConfigActivity::class.java))
-            }
-
-            EConfigType.POLICYGROUP -> {
-                ownerActivity.startActivity(intent.setClass(ownerActivity, ServerGroupActivity::class.java))
-            }
-
-            else -> {
-                ownerActivity.startActivity(intent.setClass(ownerActivity, ServerActivity::class.java))
-            }
-        }
+        // BoltVPN: server editing disabled — users don't edit configs manually
+        // Original code launched ServerActivity/ServerCustomConfigActivity/ServerGroupActivity
     }
 
     /**
