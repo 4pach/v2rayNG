@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- BoltVPN: Connect button — connected state (neon glow) -->
+<!-- BoltVPN: Connect button — connected state
+     Outer neon ring (bright cyan) + inner dark circle with neon border -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Outer glow ring — neon -->
     <item>
         <shape android:shape="oval">
             <stroke
-                android:width="3dp"
+                android:width="2dp"
                 android:color="@color/bolt_neon" />
             <solid android:color="@android:color/transparent" />
             <size
@@ -13,16 +14,22 @@
                 android:height="190dp" />
         </shape>
     </item>
-    <!-- Inner circle — neon tinted -->
+    <!-- Inner circle with gradient + neon border -->
     <item
-        android:left="12dp"
-        android:top="12dp"
-        android:right="12dp"
-        android:bottom="12dp">
+        android:left="14dp"
+        android:top="14dp"
+        android:right="14dp"
+        android:bottom="14dp">
         <shape android:shape="oval">
-            <solid android:color="@color/bolt_card" />
+            <gradient
+                android:type="radial"
+                android:gradientRadius="85dp"
+                android:centerX="0.5"
+                android:centerY="0.4"
+                android:startColor="#1a2a4a"
+                android:endColor="#0f1629" />
             <stroke
-                android:width="2dp"
+                android:width="1.5dp"
                 android:color="@color/bolt_neon" />
         </shape>
     </item>

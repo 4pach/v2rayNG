@@ -216,7 +216,10 @@ class MainActivity : HelperBaseActivity() {
         val selectedGuid = MmkvManager.getSelectServer() ?: return
         val server = mainViewModel.serversCache.firstOrNull { it.guid == selectedGuid }
         if (server != null) {
-            binding.tvServerName.text = server.profile.remarks.ifEmpty { getString(R.string.bolt_select_server) }
+            val remarks = server.profile.remarks.ifEmpty { getString(R.string.bolt_select_server) }
+            binding.tvServerName.text = remarks
+
+            // Ping
             val aff = MmkvManager.decodeServerAffiliationInfo(selectedGuid)
             val pingStr = aff?.getTestDelayString().orEmpty()
             if (pingStr.isNotEmpty()) {
@@ -225,6 +228,29 @@ class MainActivity : HelperBaseActivity() {
             } else {
                 binding.tvServerPing.isVisible = false
             }
+
+            // Flag — determine country from remarks
+            val flagRes = getCountryFlagRes(remarks)
+            if (flagRes != 0) {
+                com.bumptech.glide.Glide.with(this)
+                    .asGif()
+                    .load(flagRes)
+                    .into(binding.ivServerFlag)
+            }
+        }
+    }
+
+    /**
+     * Maps server remarks to country flag GIF resource in res/raw/
+     */
+    private fun getCountryFlagRes(remarks: String): Int {
+        val lower = remarks.lowercase()
+        return when {
+            lower.contains("us") || lower.contains("сша") || lower.contains("нью-йорк") || lower.contains("new york") -> R.raw.flag_us
+            lower.contains("nl") || lower.contains("нидерланд") || lower.contains("amsterdam") || lower.contains("амстердам") -> R.raw.flag_nl
+            lower.contains("de") || lower.contains("герман") || lower.contains("frankfurt") || lower.contains("франкфурт") -> R.raw.flag_de
+            lower.contains("fi") || lower.contains("финлянд") || lower.contains("helsinki") || lower.contains("хельсинки") -> R.raw.flag_fi
+            else -> 0
         }
     }
 

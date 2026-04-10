@@ -156,6 +156,7 @@ dependencies {
     implementation(libs.toasty)
     implementation(libs.editorkit)
     implementation(libs.flexbox)
+    implementation("com.github.bumptech.glide:glide:4.16.0") // BoltVPN: GIF flags
 
     // Data and Storage Libraries
     implementation(libs.mmkv.static)
