@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- BoltVPN: Main activity — FragmentContainerView + Tab Bar pill -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bolt_bg"
+    android:fitsSystemWindows="true">
+
+    <!-- Fragment container (takes all space except tab bar) -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- Tab Bar: pill shape per Pencil (cornerRadius 30, height 60, #0f162990, stroke #00d4ff30) -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="16dp">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_nav"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/bolt_tab_bar_bg"
+            android:elevation="4dp"
+            app:itemIconTint="@color/bolt_text_dim"
+            app:itemTextColor="@color/bolt_text_dim"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/menu_bottom_nav" />
+    </FrameLayout>
+
+</LinearLayout>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pencil: Server item selected — fill #00d4ff08, stroke #00d4ff40/1.5 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="#0800d4ff" />
+    <stroke android:width="1.5dp" android:color="#4000d4ff" />
+    <corners android:radius="14dp" />
+</shape>

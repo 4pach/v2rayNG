@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- BoltVPN Home Fragment — per boltvpn-screens.pen exact specs
+     Content: padding 0/24/20/24, gap 20, gravity bottom -->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bolt_home_bg">
+
+    <!-- CyberParticles: 8 absolute text elements per Pencil p1-p8 -->
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="0x" android:textColor="#1200d4ff" android:fontFamily="@font/jetbrains_mono"
+        android:textSize="10sp" android:layout_marginStart="20dp" android:layout_marginTop="120dp" />
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="ssh" android:textColor="#1000d4ff" android:fontFamily="@font/jetbrains_mono"
+        android:textSize="9sp" android:layout_marginStart="340dp" android:layout_marginTop="200dp" />
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="⚡" android:textColor="#1500d4ff"
+        android:textSize="12sp" android:layout_marginStart="60dp" android:layout_marginTop="350dp" />
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="vpn" android:textColor="#0D00d4ff" android:fontFamily="@font/jetbrains_mono"
+        android:textSize="8sp" android:layout_marginStart="300dp" android:layout_marginTop="450dp" />
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="443" android:textColor="#1000d4ff" android:fontFamily="@font/jetbrains_mono"
+        android:textSize="10sp" android:layout_marginStart="50dp" android:layout_marginTop="550dp" />
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="tls" android:textColor="#0D00d4ff" android:fontFamily="@font/jetbrains_mono"
+        android:textSize="9sp" android:layout_marginStart="350dp" android:layout_marginTop="650dp" />
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="&gt;_" android:textColor="#1000d4ff" android:fontFamily="@font/jetbrains_mono"
+        android:textSize="11sp" android:layout_marginStart="180dp" android:layout_marginTop="150dp" />
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="{}" android:textColor="#0D00d4ff" android:fontFamily="@font/jetbrains_mono"
+        android:textSize="10sp" android:layout_marginStart="280dp" android:layout_marginTop="320dp" />
+
+    <!-- Main content: vertical, gravity bottom, padding 0/24/20/24 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal|bottom"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="20dp"
+        android:clipToPadding="false">
+
+        <!-- Pencil KuJHa: Logo Row — icon 40x40 cornerRadius=8 + "Bolt VPN" Inter 26/700 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/bolt_logo"
+                android:contentDescription="@string/app_name" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/app_name"
+                android:textColor="#d0dce8"
+                android:textSize="26sp"
+                android:fontFamily="@font/inter"
+                android:textStyle="bold"
+                android:letterSpacing="-0.01" />
+        </LinearLayout>
+
+        <!-- Pencil p5hQA: Connect Glow Ring 190x190 cornerRadius=95 -->
+        <FrameLayout
+            android:id="@+id/btn_connect"
+            android:layout_width="190dp"
+            android:layout_height="190dp"
+            android:layout_marginBottom="20dp"
+            android:elevation="12dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/bolt_connect_button_bg">
+
+            <!-- Pencil tAbUn: Inner button 160x160 cornerRadius=80 -->
+            <FrameLayout
+                android:id="@+id/connect_inner"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bolt_connect_inner_off">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <!-- Pencil 6KWRC: power icon 44dp -->
+                    <ImageView
+                        android:id="@+id/iv_power"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:src="@drawable/ic_power_bolt"
+                        android:contentDescription="@string/bolt_connect" />
+
+                    <!-- Pencil eQa1O: label Inter 11/600 letterSpacing=2 -->
+                    <TextView
+                        android:id="@+id/tv_connect_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="@string/bolt_connect"
+                        android:textColor="#8000d4ff"
+                        android:textSize="11sp"
+                        android:fontFamily="@font/inter"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.15" />
+                </LinearLayout>
+            </FrameLayout>
+        </FrameLayout>
+
+        <!-- Pencil q3akq: Server Selector 320x58 cornerRadius=14 -->
+        <FrameLayout
+            android:id="@+id/layout_server"
+            android:layout_width="320dp"
+            android:layout_height="58dp"
+            android:layout_marginBottom="20dp"
+            android:elevation="4dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:background="@drawable/bolt_server_selector_bg">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp">
+
+                <!-- Pencil 37BfK: flagBg 38x38 oval -->
+                <FrameLayout
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:background="@drawable/bolt_flag_circle_bg">
+                    <ImageView
+                        android:id="@+id/iv_server_flag"
+                        android:layout_width="24dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:scaleType="fitCenter" />
+                </FrameLayout>
+
+                <!-- Pencil nJJvx: server info -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="12dp">
+
+                    <!-- Pencil SCj5C: Inter 14/600 #d0dce8 -->
+                    <TextView
+                        android:id="@+id/tv_server_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/bolt_select_server"
+                        android:textColor="#d0dce8"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/inter"
+                        android:textStyle="bold" />
+
+                    <!-- Pencil KtoMD: Inter 10 #00d4ff80 -->
+                    <TextView
+                        android:id="@+id/tv_server_ping"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textColor="#8000d4ff"
+                        android:textSize="10sp"
+                        android:fontFamily="@font/inter"
+                        tools:text="48 ms  •  120 Мбит/с" />
+                </LinearLayout>
+
+                <!-- Pencil SZLqp: signal 18dp #00d4ff80 -->
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_signal_bars" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- Pencil wDGNu: Status Row — dot 8x8 + text Inter 13/500 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
+
+            <View
+                android:id="@+id/view_status_dot"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="@drawable/bolt_status_dot_gray" />
+
+            <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/bolt_status_disconnected"
+                android:textColor="#7a9aaa"
+                android:textSize="13sp"
+                android:fontFamily="@font/inter" />
+        </LinearLayout>
+
+        <!-- Pencil M5d01: Stats Row — 3 cards, gap=10, width=320, height=62 -->
+        <LinearLayout
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp"
+            android:baselineAligned="false">
+
+            <LinearLayout
+                android:layout_width="0dp" android:layout_height="62dp" android:layout_weight="1"
+                android:layout_marginEnd="5dp" android:orientation="vertical" android:gravity="center"
+                android:background="@drawable/bolt_stat_card_bg">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="↓" android:textColor="@color/bolt_neon" android:textSize="14sp" />
+                <TextView android:id="@+id/tv_speed_down" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="— Мб/с" android:textColor="#d0dce8" android:textSize="12sp"
+                    android:fontFamily="@font/inter" android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp" android:layout_height="62dp" android:layout_weight="1"
+                android:layout_marginHorizontal="5dp" android:orientation="vertical" android:gravity="center"
+                android:background="@drawable/bolt_stat_card_bg">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="↑" android:textColor="@color/bolt_neon" android:textSize="14sp" />
+                <TextView android:id="@+id/tv_speed_up" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="— Мб/с" android:textColor="#d0dce8" android:textSize="12sp"
+                    android:fontFamily="@font/inter" android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp" android:layout_height="62dp" android:layout_weight="1"
+                android:layout_marginStart="5dp" android:orientation="vertical" android:gravity="center"
+                android:background="@drawable/bolt_stat_card_bg">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="⏱" android:textColor="@color/bolt_neon" android:textSize="14sp" />
+                <TextView android:id="@+id/tv_timer" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="00:00" android:textColor="#d0dce8" android:textSize="12sp"
+                    android:fontFamily="@font/inter" android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Pencil BWMlh: Session Traffic 320x44 cornerRadius=12 -->
+        <LinearLayout
+            android:layout_width="320dp" android:layout_height="44dp"
+            android:orientation="horizontal" android:gravity="center"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bolt_traffic_bg">
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="↓ " android:textColor="@color/bolt_neon" android:textSize="12sp" />
+            <TextView android:id="@+id/tv_traffic_down" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="0 MB" android:textColor="@color/bolt_neon" android:textSize="12sp"
+                android:fontFamily="@font/jetbrains_mono" android:textStyle="bold" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="  /  " android:textColor="#407a9aaa" android:textSize="12sp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="↑ " android:textColor="@color/bolt_green" android:textSize="12sp" />
+            <TextView android:id="@+id/tv_traffic_up" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="0 MB" android:textColor="@color/bolt_green" android:textSize="12sp"
+                android:fontFamily="@font/jetbrains_mono" android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Pencil QNCsi: IP Status -->
+        <LinearLayout
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
+            <ImageView android:id="@+id/iv_lock" android:layout_width="14dp" android:layout_height="14dp"
+                android:src="@drawable/ic_lock_open" />
+            <TextView android:id="@+id/tv_ip_status" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginStart="6dp" android:text="@string/bolt_traffic_unprotected"
+                android:textColor="#90ff4466" android:textSize="11sp" android:fontFamily="@font/jetbrains_mono" />
+        </LinearLayout>
+
+        <!-- Pencil tjAvv: Encryption Badge 320w cornerRadius=20 -->
+        <LinearLayout
+            android:id="@+id/layout_encryption"
+            android:layout_width="320dp" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="center"
+            android:visibility="gone" android:padding="6dp"
+            android:background="@drawable/bolt_encryption_badge_bg"
+            tools:visibility="visible">
+            <ImageView android:layout_width="12dp" android:layout_height="12dp"
+                android:src="@drawable/ic_lock_closed" />
+            <TextView android:id="@+id/tv_encryption" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginStart="6dp" android:text="@string/bolt_encryption_label"
+                android:textColor="@color/bolt_green" android:textSize="10sp" android:fontFamily="@font/inter" />
+        </LinearLayout>
+
+    </LinearLayout>
+</FrameLayout>

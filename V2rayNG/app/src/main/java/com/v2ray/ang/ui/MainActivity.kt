@@ -1,19 +1,30 @@
 package com.v2ray.ang.ui
 
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.net.Uri
 import android.net.VpnService
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.Menu
+import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.tabs.TabLayoutMediator
 import com.v2ray.ang.AppConfig
 import com.v2ray.ang.R
 import com.v2ray.ang.databinding.ActivityMainBinding
+import com.v2ray.ang.enums.EConfigType
 import com.v2ray.ang.enums.PermissionType
 import com.v2ray.ang.extension.toast
 import com.v2ray.ang.extension.toastError
@@ -22,18 +33,21 @@ import com.v2ray.ang.handler.MmkvManager
 import com.v2ray.ang.handler.SettingsChangeManager
 import com.v2ray.ang.handler.SettingsManager
 import com.v2ray.ang.handler.V2RayServiceManager
+import com.v2ray.ang.util.Utils
 import com.v2ray.ang.viewmodel.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainActivity : HelperBaseActivity() {
+class MainActivity : HelperBaseActivity(), NavigationView.OnNavigationItemSelectedListener {
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
     val mainViewModel: MainViewModel by viewModels()
+    private lateinit var groupPagerAdapter: GroupPagerAdapter
+    private var tabMediator: TabLayoutMediator? = null
 
     private val requestVpnPermission = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == RESULT_OK) {
@@ -44,57 +58,50 @@ class MainActivity : HelperBaseActivity() {
         if (SettingsChangeManager.consumeRestartService() && mainViewModel.isRunning.value == true) {
             restartV2Ray()
         }
+        if (SettingsChangeManager.consumeSetupGroupTab()) {
+            setupGroupTab()
+        }
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        setupToolbar(binding.toolbar, false, getString(R.string.title_server))
 
-        // BoltVPN: no toolbar, but init progressBar for showLoading()/hideLoading()
-        setupToolbar(null, false)
+        // setup viewpager and tablayout
+        groupPagerAdapter = GroupPagerAdapter(this, emptyList())
+        binding.viewPager.adapter = groupPagerAdapter
+        binding.viewPager.isUserInputEnabled = true
 
-        // BoltVPN: Connect button → VPN toggle
-        binding.btnConnect.setOnClickListener { handleFabAction() }
-
-        // BoltVPN: Server selector → open server list (placeholder for ServerBottomSheet)
-        binding.layoutServer.setOnClickListener {
-            // TODO: Step 3.5 — open ServerBottomSheet
-            toast(R.string.bolt_select_server)
-        }
-
-        // BoltVPN: Bottom navigation
-        binding.bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_vpn -> true // already on VPN screen
-                R.id.nav_subscription -> {
-                    requestActivityLauncher.launch(Intent(this, SubSettingActivity::class.java))
-                    true
+        // setup navigation drawer
+        val toggle = ActionBarDrawerToggle(
+            this, binding.drawerLayout, binding.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
+        )
+        binding.drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+        binding.navView.setNavigationItemSelectedListener(this)
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    binding.drawerLayout.closeDrawer(GravityCompat.START)
+                } else {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                    isEnabled = true
                 }
-                R.id.nav_account -> {
-                    // TODO: Step 3.6 — Account fragment
-                    toast(R.string.nav_account)
-                    true
-                }
-                R.id.nav_referral -> {
-                    // TODO: Step 3.6 — Referral fragment
-                    toast(R.string.nav_referral)
-                    true
-                }
-                R.id.nav_more -> {
-                    requestActivityLauncher.launch(Intent(this, SettingsActivity::class.java))
-                    true
-                }
-                else -> false
             }
-        }
+        })
 
+        binding.fab.setOnClickListener { handleFabAction() }
+        binding.layoutTest.setOnClickListener { handleLayoutTestClick() }
+
+        setupGroupTab()
         setupViewModel()
         mainViewModel.reloadServerList()
 
-        checkAndRequestPermission(PermissionType.POST_NOTIFICATIONS) {}
-
-        // Auto-update subscription on first launch
-        importConfigViaSub()
+        checkAndRequestPermission(PermissionType.POST_NOTIFICATIONS) {
+        }
     }
 
     private fun setupViewModel() {
@@ -104,6 +111,24 @@ class MainActivity : HelperBaseActivity() {
         }
         mainViewModel.startListenBroadcast()
         mainViewModel.initAssets(assets)
+    }
+
+    private fun setupGroupTab() {
+        val groups = mainViewModel.getSubscriptions(this)
+        groupPagerAdapter.update(groups)
+
+        tabMediator?.detach()
+        tabMediator = TabLayoutMediator(binding.tabGroup, binding.viewPager) { tab, position ->
+            groupPagerAdapter.groups.getOrNull(position)?.let {
+                tab.text = it.remarks
+                tab.tag = it.id
+            }
+        }.also { it.attach() }
+
+        val targetIndex = groups.indexOfFirst { it.id == mainViewModel.subscriptionId }.takeIf { it >= 0 } ?: (groups.size - 1)
+        binding.viewPager.setCurrentItem(targetIndex, false)
+
+        binding.tabGroup.isVisible = groups.size > 1
     }
 
     private fun handleFabAction() {
@@ -120,6 +145,15 @@ class MainActivity : HelperBaseActivity() {
             }
         } else {
             startV2Ray()
+        }
+    }
+
+    private fun handleLayoutTestClick() {
+        if (mainViewModel.isRunning.value == true) {
+            setTestState(getString(R.string.connection_test_testing))
+            mainViewModel.testCurrentServerRealPing()
+        } else {
+            // service not running: keep existing no-op (could show a message if desired)
         }
     }
 
@@ -145,117 +179,264 @@ class MainActivity : HelperBaseActivity() {
         binding.tvTestState.text = content
     }
 
-    /**
-     * BoltVPN: Apply running state to new UI elements
-     * Updates: connect button, status dot, status text, IP indicator, encryption
-     */
-    private fun applyRunningState(isLoading: Boolean, isRunning: Boolean) {
+    private  fun applyRunningState(isLoading: Boolean, isRunning: Boolean) {
         if (isLoading) {
-            // Connecting state
-            binding.tvConnectLabel.text = getString(R.string.bolt_connecting)
-            binding.tvStatus.text = getString(R.string.bolt_status_connecting)
-            binding.tvStatus.setTextColor(ContextCompat.getColor(this, R.color.bolt_yellow))
-            binding.progressBar.isVisible = true
+            binding.fab.setImageResource(R.drawable.ic_fab_check)
             return
         }
 
-        binding.progressBar.isVisible = false
-
         if (isRunning) {
-            // Connected state — neon glow
-            binding.btnConnect.setBackgroundResource(R.drawable.bolt_connect_button_connected)
-            binding.ivPower.setColorFilter(ContextCompat.getColor(this, R.color.bolt_neon))
-            binding.tvConnectLabel.text = getString(R.string.bolt_disconnect)
-            binding.tvConnectLabel.setTextColor(ContextCompat.getColor(this, R.color.bolt_neon))
-
-            binding.viewStatusDot.setBackgroundResource(R.drawable.bolt_status_dot_green)
-            binding.tvStatus.text = getString(R.string.bolt_status_connected)
-            binding.tvStatus.setTextColor(ContextCompat.getColor(this, R.color.bolt_green))
-
-            // IP & encryption
-            binding.ivLock.setImageResource(R.drawable.ic_lock_closed)
-            binding.tvIpStatus.text = getString(R.string.bolt_ip_hidden) + " • " + getString(R.string.bolt_traffic_encrypted)
-            binding.tvIpStatus.setTextColor(ContextCompat.getColor(this, R.color.bolt_green))
-            binding.layoutEncryption.isVisible = true
-
+            binding.fab.setImageResource(R.drawable.ic_stop_24dp)
+            binding.fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.color_fab_active))
+            binding.fab.contentDescription = getString(R.string.action_stop_service)
             setTestState(getString(R.string.connection_connected))
+            binding.layoutTest.isFocusable = true
         } else {
-            // Disconnected state — muted
-            binding.btnConnect.setBackgroundResource(R.drawable.bolt_connect_button_bg)
-            binding.ivPower.setColorFilter(ContextCompat.getColor(this, R.color.bolt_text_dim))
-            binding.tvConnectLabel.text = getString(R.string.bolt_connect)
-            binding.tvConnectLabel.setTextColor(ContextCompat.getColor(this, R.color.bolt_text_dim))
-
-            binding.viewStatusDot.setBackgroundResource(R.drawable.bolt_status_dot_gray)
-            binding.tvStatus.text = getString(R.string.bolt_status_disconnected)
-            binding.tvStatus.setTextColor(ContextCompat.getColor(this, R.color.bolt_text_dim))
-
-            // IP & encryption
-            binding.ivLock.setImageResource(R.drawable.ic_lock_open)
-            binding.tvIpStatus.text = getString(R.string.bolt_traffic_unprotected)
-            binding.tvIpStatus.setTextColor(ContextCompat.getColor(this, R.color.bolt_red))
-            binding.layoutEncryption.isVisible = false
-
-            // Reset stats
-            binding.tvSpeedDown.text = "— Мб/с"
-            binding.tvSpeedUp.text = "— Мб/с"
-            binding.tvTimer.text = "00:00"
-            binding.tvTrafficDown.text = "0 MB"
-            binding.tvTrafficUp.text = "0 MB"
-
+            binding.fab.setImageResource(R.drawable.ic_play_24dp)
+            binding.fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.color_fab_inactive))
+            binding.fab.contentDescription = getString(R.string.tasker_start_service)
             setTestState(getString(R.string.connection_not_connected))
+            binding.layoutTest.isFocusable = false
         }
     }
 
-    // ===== Server display (called from subscription update) =====
+    override fun onResume() {
+        super.onResume()
+    }
 
-    /**
-     * Updates the server selector card with the currently selected server info
-     */
-    private fun updateSelectedServerDisplay() {
-        val selectedGuid = MmkvManager.getSelectServer() ?: return
-        val server = mainViewModel.serversCache.firstOrNull { it.guid == selectedGuid }
-        if (server != null) {
-            val remarks = server.profile.remarks.ifEmpty { getString(R.string.bolt_select_server) }
-            binding.tvServerName.text = remarks
+    override fun onPause() {
+        super.onPause()
+    }
 
-            // Ping
-            val aff = MmkvManager.decodeServerAffiliationInfo(selectedGuid)
-            val pingStr = aff?.getTestDelayString().orEmpty()
-            if (pingStr.isNotEmpty()) {
-                binding.tvServerPing.text = pingStr
-                binding.tvServerPing.isVisible = true
-            } else {
-                binding.tvServerPing.isVisible = false
-            }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
 
-            // Flag — determine country from remarks
-            val flagRes = getCountryFlagRes(remarks)
-            if (flagRes != 0) {
-                com.bumptech.glide.Glide.with(this)
-                    .asGif()
-                    .load(flagRes)
-                    .into(binding.ivServerFlag)
+        val searchItem = menu.findItem(R.id.search_view)
+        if (searchItem != null) {
+            val searchView = searchItem.actionView as SearchView
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean = false
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    mainViewModel.filterConfig(newText.orEmpty())
+                    return false
+                }
+            })
+
+            searchView.setOnCloseListener {
+                mainViewModel.filterConfig("")
+                false
             }
         }
+        return super.onCreateOptionsMenu(menu)
     }
 
-    /**
-     * Maps server remarks to country flag GIF resource in res/raw/
-     */
-    private fun getCountryFlagRes(remarks: String): Int {
-        val lower = remarks.lowercase()
-        return when {
-            lower.contains("us") || lower.contains("сша") || lower.contains("нью-йорк") || lower.contains("new york") -> R.raw.flag_us
-            lower.contains("nl") || lower.contains("нидерланд") || lower.contains("amsterdam") || lower.contains("амстердам") -> R.raw.flag_nl
-            lower.contains("de") || lower.contains("герман") || lower.contains("frankfurt") || lower.contains("франкфурт") -> R.raw.flag_de
-            lower.contains("fi") || lower.contains("финлянд") || lower.contains("helsinki") || lower.contains("хельсинки") -> R.raw.flag_fi
-            else -> 0
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.import_qrcode -> {
+            importQRcode()
+            true
+        }
+
+        R.id.import_clipboard -> {
+            importClipboard()
+            true
+        }
+
+        R.id.import_local -> {
+            importConfigLocal()
+            true
+        }
+
+        R.id.import_manually_policy_group -> {
+            importManually(EConfigType.POLICYGROUP.value)
+            true
+        }
+
+        R.id.import_manually_vmess -> {
+            importManually(EConfigType.VMESS.value)
+            true
+        }
+
+        R.id.import_manually_vless -> {
+            importManually(EConfigType.VLESS.value)
+            true
+        }
+
+        R.id.import_manually_ss -> {
+            importManually(EConfigType.SHADOWSOCKS.value)
+            true
+        }
+
+        R.id.import_manually_socks -> {
+            importManually(EConfigType.SOCKS.value)
+            true
+        }
+
+        R.id.import_manually_http -> {
+            importManually(EConfigType.HTTP.value)
+            true
+        }
+
+        R.id.import_manually_trojan -> {
+            importManually(EConfigType.TROJAN.value)
+            true
+        }
+
+        R.id.import_manually_wireguard -> {
+            importManually(EConfigType.WIREGUARD.value)
+            true
+        }
+
+        R.id.import_manually_hysteria2 -> {
+            importManually(EConfigType.HYSTERIA2.value)
+            true
+        }
+
+        R.id.export_all -> {
+            exportAll()
+            true
+        }
+
+        R.id.ping_all -> {
+            toast(getString(R.string.connection_test_testing_count, mainViewModel.serversCache.count()))
+            mainViewModel.testAllTcping()
+            true
+        }
+
+        R.id.real_ping_all -> {
+            toast(getString(R.string.connection_test_testing_count, mainViewModel.serversCache.count()))
+            mainViewModel.testAllRealPing()
+            true
+        }
+
+        R.id.service_restart -> {
+            restartV2Ray()
+            true
+        }
+
+        R.id.del_all_config -> {
+            delAllConfig()
+            true
+        }
+
+        R.id.del_duplicate_config -> {
+            delDuplicateConfig()
+            true
+        }
+
+        R.id.del_invalid_config -> {
+            delInvalidConfig()
+            true
+        }
+
+        R.id.sort_by_test_results -> {
+            sortByTestResults()
+            true
+        }
+
+        R.id.sub_update -> {
+            importConfigViaSub()
+            true
+        }
+
+        R.id.locate_selected_config -> {
+            locateSelectedServer()
+            true
+        }
+
+        else -> super.onOptionsItemSelected(item)
+    }
+
+    private fun importManually(createConfigType: Int) {
+        if (createConfigType == EConfigType.POLICYGROUP.value) {
+            startActivity(
+                Intent()
+                    .putExtra("subscriptionId", mainViewModel.subscriptionId)
+                    .setClass(this, ServerGroupActivity::class.java)
+            )
+        } else {
+            startActivity(
+                Intent()
+                    .putExtra("createConfigType", createConfigType)
+                    .putExtra("subscriptionId", mainViewModel.subscriptionId)
+                    .setClass(this, ServerActivity::class.java)
+            )
         }
     }
 
-    // ===== Subscription import =====
+    /**
+     * import config from qrcode
+     */
+    private fun importQRcode(): Boolean {
+        launchQRCodeScanner { scanResult ->
+            if (scanResult != null) {
+                importBatchConfig(scanResult)
+            }
+        }
+        return true
+    }
 
+    /**
+     * import config from clipboard
+     */
+    private fun importClipboard()
+            : Boolean {
+        try {
+            val clipboard = Utils.getClipboard(this)
+            importBatchConfig(clipboard)
+        } catch (e: Exception) {
+            Log.e(AppConfig.TAG, "Failed to import config from clipboard", e)
+            return false
+        }
+        return true
+    }
+
+    private fun importBatchConfig(server: String?) {
+        showLoading()
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val (count, countSub) = AngConfigManager.importBatchConfig(server, mainViewModel.subscriptionId, true)
+                delay(500L)
+                withContext(Dispatchers.Main) {
+                    when {
+                        count > 0 -> {
+                            toast(getString(R.string.title_import_config_count, count))
+                            mainViewModel.reloadServerList()
+                        }
+
+                        countSub > 0 -> setupGroupTab()
+                        else -> toastError(R.string.toast_failure)
+                    }
+                    hideLoading()
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    toastError(R.string.toast_failure)
+                    hideLoading()
+                }
+                Log.e(AppConfig.TAG, "Failed to import batch config", e)
+            }
+        }
+    }
+
+    /**
+     * import config from local config file
+     */
+    private fun importConfigLocal(): Boolean {
+        try {
+            showFileChooser()
+        } catch (e: Exception) {
+            Log.e(AppConfig.TAG, "Failed to import config from local file", e)
+            return false
+        }
+        return true
+    }
+
+
+    /**
+     * import config from sub
+     */
     fun importConfigViaSub(): Boolean {
         showLoading()
 
@@ -279,43 +460,158 @@ class MainActivity : HelperBaseActivity() {
                     mainViewModel.reloadServerList()
                 }
                 hideLoading()
-                updateSelectedServerDisplay()
             }
         }
         return true
     }
 
-    private fun importBatchConfig(server: String?) {
+    private fun exportAll() {
         showLoading()
-
         lifecycleScope.launch(Dispatchers.IO) {
-            try {
-                val (count, countSub) = AngConfigManager.importBatchConfig(server, mainViewModel.subscriptionId, true)
-                delay(500L)
-                withContext(Dispatchers.Main) {
-                    when {
-                        count > 0 -> {
-                            toast(getString(R.string.title_import_config_count, count))
-                            mainViewModel.reloadServerList()
-                        }
-                        countSub > 0 -> { /* subscription added */ }
-                        else -> toastError(R.string.toast_failure)
-                    }
-                    hideLoading()
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
+            val ret = mainViewModel.exportAllServer()
+            launch(Dispatchers.Main) {
+                if (ret > 0)
+                    toast(getString(R.string.title_export_config_count, ret))
+                else
                     toastError(R.string.toast_failure)
-                    hideLoading()
-                }
-                Log.e(AppConfig.TAG, "Failed to import batch config", e)
+                hideLoading()
             }
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        updateSelectedServerDisplay()
+    private fun delAllConfig() {
+        AlertDialog.Builder(this).setMessage(R.string.del_config_comfirm)
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                showLoading()
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val ret = mainViewModel.removeAllServer()
+                    launch(Dispatchers.Main) {
+                        mainViewModel.reloadServerList()
+                        toast(getString(R.string.title_del_config_count, ret))
+                        hideLoading()
+                    }
+                }
+            }
+            .setNegativeButton(android.R.string.cancel) { _, _ ->
+                //do noting
+            }
+            .show()
+    }
+
+    private fun delDuplicateConfig() {
+        AlertDialog.Builder(this).setMessage(R.string.del_config_comfirm)
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                showLoading()
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val ret = mainViewModel.removeDuplicateServer()
+                    launch(Dispatchers.Main) {
+                        mainViewModel.reloadServerList()
+                        toast(getString(R.string.title_del_duplicate_config_count, ret))
+                        hideLoading()
+                    }
+                }
+            }
+            .setNegativeButton(android.R.string.cancel) { _, _ ->
+                //do noting
+            }
+            .show()
+    }
+
+    private fun delInvalidConfig() {
+        AlertDialog.Builder(this).setMessage(R.string.del_invalid_config_comfirm)
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                showLoading()
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val ret = mainViewModel.removeInvalidServer()
+                    launch(Dispatchers.Main) {
+                        mainViewModel.reloadServerList()
+                        toast(getString(R.string.title_del_config_count, ret))
+                        hideLoading()
+                    }
+                }
+            }
+            .setNegativeButton(android.R.string.cancel) { _, _ ->
+                //do noting
+            }
+            .show()
+    }
+
+    private fun sortByTestResults() {
+        showLoading()
+        lifecycleScope.launch(Dispatchers.IO) {
+            mainViewModel.sortByTestResults()
+            launch(Dispatchers.Main) {
+                mainViewModel.reloadServerList()
+                hideLoading()
+            }
+        }
+    }
+
+    /**
+     * show file chooser
+     */
+    private fun showFileChooser() {
+        launchFileChooser { uri ->
+            if (uri == null) {
+                return@launchFileChooser
+            }
+
+            readContentFromUri(uri)
+        }
+    }
+
+    /**
+     * read content from uri
+     */
+    private fun readContentFromUri(uri: Uri) {
+        try {
+            contentResolver.openInputStream(uri).use { input ->
+                importBatchConfig(input?.bufferedReader()?.readText())
+            }
+        } catch (e: Exception) {
+            Log.e(AppConfig.TAG, "Failed to read content from URI", e)
+        }
+    }
+
+    /**
+     * Locates and scrolls to the currently selected server.
+     * If the selected server is in a different group, automatically switches to that group first.
+     */
+    private fun locateSelectedServer() {
+        val targetSubscriptionId = mainViewModel.findSubscriptionIdBySelect()
+        if (targetSubscriptionId.isNullOrEmpty()) {
+            toast(R.string.title_file_chooser)
+            return
+        }
+
+        val targetGroupIndex = groupPagerAdapter.groups.indexOfFirst { it.id == targetSubscriptionId }
+        if (targetGroupIndex < 0) {
+            toast(R.string.toast_server_not_found_in_group)
+            return
+        }
+
+        // Switch to target group if needed, then scroll to the server
+        if (binding.viewPager.currentItem != targetGroupIndex) {
+            binding.viewPager.setCurrentItem(targetGroupIndex, true)
+            binding.viewPager.postDelayed({ scrollToSelectedServer(targetGroupIndex) }, 1000)
+        } else {
+            scrollToSelectedServer(targetGroupIndex)
+        }
+    }
+
+    /**
+     * Scrolls to the selected server in the specified fragment.
+     * @param groupIndex The index of the group/fragment to scroll in
+     */
+    private fun scrollToSelectedServer(groupIndex: Int) {
+        val itemId = groupPagerAdapter.getItemId(groupIndex)
+        val fragment = supportFragmentManager.findFragmentByTag("f$itemId") as? GroupServerFragment
+
+        if (fragment?.isAdded == true && fragment.view != null) {
+            fragment.scrollToSelectedServer()
+        } else {
+            toast(R.string.toast_fragment_not_available)
+        }
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
@@ -326,8 +622,28 @@ class MainActivity : HelperBaseActivity() {
         return super.onKeyDown(keyCode, event)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // BoltVPN: no toolbar menu — all navigation via bottom tabs
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        // Handle navigation view item clicks here.
+        when (item.itemId) {
+            R.id.sub_setting -> requestActivityLauncher.launch(Intent(this, SubSettingActivity::class.java))
+            R.id.per_app_proxy_settings -> requestActivityLauncher.launch(Intent(this, PerAppProxyActivity::class.java))
+            R.id.routing_setting -> requestActivityLauncher.launch(Intent(this, RoutingSettingActivity::class.java))
+            R.id.user_asset_setting -> requestActivityLauncher.launch(Intent(this, UserAssetActivity::class.java))
+            R.id.settings -> requestActivityLauncher.launch(Intent(this, SettingsActivity::class.java))
+            R.id.promotion -> Utils.openUri(this, "${Utils.decode(AppConfig.APP_PROMOTION_URL)}?t=${System.currentTimeMillis()}")
+            R.id.logcat -> startActivity(Intent(this, LogcatActivity::class.java))
+            R.id.check_for_update -> startActivity(Intent(this, CheckUpdateActivity::class.java))
+            R.id.backup_restore -> requestActivityLauncher.launch(Intent(this, BackupActivity::class.java))
+            R.id.about -> startActivity(Intent(this, AboutActivity::class.java))
+        }
+
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    override fun onDestroy() {
+        tabMediator?.detach()
+        super.onDestroy()
     }
 }

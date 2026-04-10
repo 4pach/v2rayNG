@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pencil HSpKp: Server modal bottom sheet
+     cornerRadius=24, fill #0d1530F0, stroke #00d4ff20/1 -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bolt_sheet_bg"
+    android:paddingBottom="20dp">
+
+    <!-- Handle bar: 40x4 cornerRadius=2 #7a9aaa40 -->
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bolt_handle_bar" />
+
+    <!-- Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="14dp"
+        android:text="@string/bolt_select_server"
+        android:textColor="#d0dce8"
+        android:textSize="18sp"
+        android:fontFamily="@font/inter"
+        android:textStyle="bold" />
+
+    <!-- Quick Connect button: 48h cornerRadius=12 -->
+    <LinearLayout
+        android:id="@+id/btn_quick_connect"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="14dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:background="@drawable/bolt_quick_connect_bg">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⚡"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/bolt_quick_connect"
+            android:textColor="#d0dce8"
+            android:textSize="13sp"
+            android:fontFamily="@font/inter"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Server list -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_servers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="20dp"
+        android:clipToPadding="false" />
+
+</LinearLayout>
