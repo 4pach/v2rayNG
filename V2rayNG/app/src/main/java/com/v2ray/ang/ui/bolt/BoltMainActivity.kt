@@ -8,7 +8,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.v2ray.ang.R
 import com.v2ray.ang.enums.PermissionType
 import com.v2ray.ang.handler.MmkvManager
-import com.v2ray.ang.ui.BaseActivity
+import com.v2ray.ang.ui.HelperBaseActivity
 import com.v2ray.ang.viewmodel.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,7 +19,7 @@ import kotlinx.coroutines.withContext
  * Replaces v2rayNG's MainActivity as LAUNCHER.
  * Uses v2rayNG engine (V2RayServiceManager, MainViewModel, MmkvManager) without modifying it.
  */
-class BoltMainActivity : BaseActivity() {
+class BoltMainActivity : HelperBaseActivity() {
 
     val mainViewModel: MainViewModel by viewModels()
 
