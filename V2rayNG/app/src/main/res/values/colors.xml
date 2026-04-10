@@ -1,57 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPing">#009966</color>
-    <color name="colorPingRed">#FF0099</color>
-    <color name="colorConfigType">#f97910</color>
+    <!-- ===== BoltVPN Cyberpunk Palette ===== -->
+
+    <!-- Core brand colors -->
+    <color name="bolt_bg">#0a0a1a</color>
+    <color name="bolt_card">#0f1629</color>
+    <color name="bolt_border">#1a2a4a</color>
+    <color name="bolt_neon">#00d4ff</color>
+    <color name="bolt_neon_dim">#0088aa</color>
+    <color name="bolt_green">#00ff88</color>
+    <color name="bolt_red">#ff4466</color>
+    <color name="bolt_yellow">#ffaa00</color>
+    <color name="bolt_gold">#ffd700</color>
+    <color name="bolt_gold_dim">#d4af37</color>
+    <color name="bolt_text">#d0dce8</color>
+    <color name="bolt_text_dim">#7a9aaa</color>
+
+    <!-- Glow / transparency variants -->
+    <color name="bolt_neon_glow">#3000d4ff</color>
+    <color name="bolt_neon_glow_strong">#6000d4ff</color>
+    <color name="bolt_green_glow">#3000ff88</color>
+    <color name="bolt_card_80">#CC0f1629</color>
+    <color name="bolt_bg_90">#E60a0a1a</color>
+    <color name="bolt_overlay">#99000000</color>
+
+    <!-- Button states -->
+    <color name="bolt_btn_disconnected">#7a9aaa</color>
+    <color name="bolt_btn_disconnected_ring">#d4af37</color>
+
+    <!-- Legacy compatibility (used by v2rayNG core) -->
+    <color name="colorPing">@color/bolt_green</color>
+    <color name="colorPingRed">@color/bolt_red</color>
+    <color name="colorConfigType">@color/bolt_neon</color>
     <color name="colorWhite">#FFFFFF</color>
-    <color name="color_fab_active">#f97910</color>
-    <color name="color_fab_inactive">#9C9C9C</color>
-    <color name="divider_color_light">#E0E0E0</color>
-    <color name="colorIndicator">@color/md_theme_primary</color>
+    <color name="color_fab_active">@color/bolt_neon</color>
+    <color name="color_fab_inactive">@color/bolt_text_dim</color>
+    <color name="divider_color_light">@color/bolt_border</color>
+    <color name="colorIndicator">@color/bolt_neon</color>
 
-    <!-- Primary colors - main tone: black -->
-    <color name="md_theme_primary">#000000</color>
-    <color name="md_theme_onPrimary">#FFFFFF</color>
-    <color name="md_theme_primaryContainer">#E0E0E0</color>
-    <color name="md_theme_onPrimaryContainer">#000000</color>
+    <!-- Material Design theme (mapped to BoltVPN palette) -->
+    <color name="md_theme_primary">@color/bolt_neon</color>
+    <color name="md_theme_onPrimary">@color/bolt_bg</color>
+    <color name="md_theme_primaryContainer">@color/bolt_card</color>
+    <color name="md_theme_onPrimaryContainer">@color/bolt_text</color>
 
-    <!-- Secondary colors - accent color: orange -->
-    <color name="md_theme_secondary">#f97910</color>
-    <color name="md_theme_onSecondary">#FFFFFF</color>
-    <color name="md_theme_secondaryContainer">#FFE8D6</color>
-    <color name="md_theme_onSecondaryContainer">#2B1700</color>
+    <color name="md_theme_secondary">@color/bolt_neon_dim</color>
+    <color name="md_theme_onSecondary">@color/bolt_bg</color>
+    <color name="md_theme_secondaryContainer">@color/bolt_card</color>
+    <color name="md_theme_onSecondaryContainer">@color/bolt_text</color>
 
-    <!-- Tertiary colors - accent color: green -->
-    <color name="md_theme_tertiary">#009966</color>
-    <color name="md_theme_onTertiary">#FFFFFF</color>
-    <color name="md_theme_tertiaryContainer">#A0F2D0</color>
-    <color name="md_theme_onTertiaryContainer">#00201A</color>
+    <color name="md_theme_tertiary">@color/bolt_green</color>
+    <color name="md_theme_onTertiary">@color/bolt_bg</color>
+    <color name="md_theme_tertiaryContainer">#1A00ff88</color>
+    <color name="md_theme_onTertiaryContainer">@color/bolt_green</color>
 
-    <!-- Error colors -->
-    <color name="md_theme_error">#BA1A1A</color>
-    <color name="md_theme_errorContainer">#FFDAD6</color>
-    <color name="md_theme_onError">#FFFFFF</color>
-    <color name="md_theme_onErrorContainer">#410002</color>
+    <color name="md_theme_error">@color/bolt_red</color>
+    <color name="md_theme_errorContainer">#1Aff4466</color>
+    <color name="md_theme_onError">@color/bolt_bg</color>
+    <color name="md_theme_onErrorContainer">@color/bolt_red</color>
 
-    <!-- Background colors -->
-    <color name="md_theme_background">#FFFFFF</color>
-    <color name="md_theme_onBackground">#1C1B1F</color>
+    <color name="md_theme_background">@color/bolt_bg</color>
+    <color name="md_theme_onBackground">@color/bolt_text</color>
 
-    <!-- Surface colors -->
-    <color name="md_theme_surface">#FFFFFF</color>
-    <color name="md_theme_onSurface">#1C1B1F</color>
-    <color name="md_theme_surfaceVariant">#E7E0EC</color>
-    <color name="md_theme_onSurfaceVariant">#49454F</color>
-    <color name="md_theme_inverseSurface">#313033</color>
-    <color name="md_theme_inverseOnSurface">#F4EFF4</color>
+    <color name="md_theme_surface">@color/bolt_bg</color>
+    <color name="md_theme_onSurface">@color/bolt_text</color>
+    <color name="md_theme_surfaceVariant">@color/bolt_card</color>
+    <color name="md_theme_onSurfaceVariant">@color/bolt_text_dim</color>
+    <color name="md_theme_inverseSurface">@color/bolt_text</color>
+    <color name="md_theme_inverseOnSurface">@color/bolt_bg</color>
 
-    <!-- Outline colors -->
-    <color name="md_theme_outline">#79747E</color>
-    <color name="md_theme_outlineVariant">#CAC4D0</color>
+    <color name="md_theme_outline">@color/bolt_border</color>
+    <color name="md_theme_outlineVariant">@color/bolt_border</color>
 
-    <!-- Other colors -->
-    <color name="md_theme_inversePrimary">#C0C0C0</color>
+    <color name="md_theme_inversePrimary">@color/bolt_neon_dim</color>
     <color name="md_theme_shadow">#000000</color>
-    <color name="md_theme_surfaceTint">#000000</color>
+    <color name="md_theme_surfaceTint">@color/bolt_neon</color>
     <color name="md_theme_scrim">#000000</color>
 </resources>

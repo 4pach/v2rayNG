@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- BoltVPN: Main screen layout — cyberpunk design
-     Replaced old DrawerLayout + ViewPager + FAB layout
+     Replaces activity_main.xml (DrawerLayout + ViewPager + FAB)
      New: Connect button + Server selector + Stats + Tab Bar -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -60,14 +60,6 @@
                     android:textStyle="bold"
                     android:letterSpacing="0.05" />
             </LinearLayout>
-
-            <!-- ====== MAP CONTAINER (future: dotted world map background) ====== -->
-            <FrameLayout
-                android:id="@+id/map_container"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0"
-                android:visibility="gone" />
 
             <!-- ====== 2. IP STATUS & SECURITY ====== -->
             <LinearLayout
@@ -178,6 +170,7 @@
                     android:gravity="center_vertical"
                     android:padding="16dp">
 
+                    <!-- Flag placeholder (will be set programmatically) -->
                     <ImageView
                         android:id="@+id/iv_server_flag"
                         android:layout_width="32dp"
@@ -342,47 +335,15 @@
             </LinearLayout>
 
             <!-- ====== 7. TRAFFIC TOTALS ====== -->
-            <LinearLayout
+            <TextView
+                android:id="@+id/tv_traffic_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="12dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="↓ "
-                    android:textColor="@color/bolt_text_dim"
-                    android:textSize="12sp"
-                    android:fontFamily="monospace" />
-
-                <TextView
-                    android:id="@+id/tv_traffic_down"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0 B"
-                    android:textColor="@color/bolt_text_dim"
-                    android:textSize="12sp"
-                    android:fontFamily="monospace" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="  /  ↑ "
-                    android:textColor="@color/bolt_text_dim"
-                    android:textSize="12sp"
-                    android:fontFamily="monospace" />
-
-                <TextView
-                    android:id="@+id/tv_traffic_up"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0 B"
-                    android:textColor="@color/bolt_text_dim"
-                    android:textSize="12sp"
-                    android:fontFamily="monospace" />
-            </LinearLayout>
+                android:layout_marginBottom="12dp"
+                android:textColor="@color/bolt_text_dim"
+                android:textSize="12sp"
+                android:fontFamily="monospace"
+                tools:text="↓ 145 MB / ↑ 23 MB" />
 
             <!-- ====== 8. ENCRYPTION INDICATOR ====== -->
             <LinearLayout

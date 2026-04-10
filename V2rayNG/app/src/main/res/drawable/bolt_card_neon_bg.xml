@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- BoltVPN: Card with neon glow border (server selector, stats) -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/bolt_card" />
+    <stroke
+        android:width="1dp"
+        android:color="@color/bolt_neon_glow_strong" />
+    <corners android:radius="16dp" />
+</shape>

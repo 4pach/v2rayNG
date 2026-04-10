@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- BoltVPN: Bottom navigation menu — 5 tabs -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_vpn"
+        android:icon="@drawable/ic_nav_vpn"
+        android:title="@string/nav_vpn" />
+
+    <item
+        android:id="@+id/nav_subscription"
+        android:icon="@drawable/ic_nav_subscription"
+        android:title="@string/nav_subscription" />
+
+    <item
+        android:id="@+id/nav_account"
+        android:icon="@drawable/ic_nav_account"
+        android:title="@string/nav_account" />
+
+    <item
+        android:id="@+id/nav_referral"
+        android:icon="@drawable/ic_nav_referral"
+        android:title="@string/nav_referral" />
+
+    <item
+        android:id="@+id/nav_more"
+        android:icon="@drawable/ic_nav_more"
+        android:title="@string/nav_more" />
+
+</menu>

@@ -438,4 +438,43 @@
         <item>WebDAV</item>
     </string-array>
 
+    <!-- ===== BoltVPN UI strings ===== -->
+
+    <!-- Bottom Navigation -->
+    <string name="nav_vpn">VPN</string>
+    <string name="nav_subscription">Подписка</string>
+    <string name="nav_account">Аккаунт</string>
+    <string name="nav_referral">Друзья</string>
+    <string name="nav_more">Ещё</string>
+
+    <!-- Connect button -->
+    <string name="bolt_connect">CONNECT</string>
+    <string name="bolt_disconnect">DISCONNECT</string>
+    <string name="bolt_connecting">CONNECTING…</string>
+
+    <!-- Status -->
+    <string name="bolt_status_disconnected">Не подключено</string>
+    <string name="bolt_status_connected">Подключено</string>
+    <string name="bolt_status_connecting">Подключение…</string>
+
+    <!-- IP & security -->
+    <string name="bolt_ip_hidden">IP: скрыт</string>
+    <string name="bolt_ip_exposed">IP: %s</string>
+    <string name="bolt_traffic_encrypted">Трафик зашифрован</string>
+    <string name="bolt_traffic_unprotected">Незащищён</string>
+    <string name="bolt_encryption_label">VLESS + XHTTP + Reality</string>
+
+    <!-- Server selector -->
+    <string name="bolt_select_server">Выберите сервер</string>
+    <string name="bolt_quick_connect">Лучший сервер</string>
+    <string name="bolt_server_ping">%d ms</string>
+
+    <!-- Stats -->
+    <string name="bolt_speed_down">↓ Скорость</string>
+    <string name="bolt_speed_up">↑ Скорость</string>
+    <string name="bolt_session_time">Сессия</string>
+    <string name="bolt_speed_format">%s Мб/с</string>
+    <string name="bolt_traffic_format">%s</string>
+    <string name="bolt_traffic_label">↓ %s / ↑ %s</string>
+
 </resources>

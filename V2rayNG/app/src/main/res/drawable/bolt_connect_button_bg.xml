@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- BoltVPN: Connect button — outer glow ring + inner circle -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Outer glow ring -->
+    <item>
+        <shape android:shape="oval">
+            <stroke
+                android:width="3dp"
+                android:color="@color/bolt_neon_glow_strong" />
+            <solid android:color="@android:color/transparent" />
+            <size
+                android:width="190dp"
+                android:height="190dp" />
+        </shape>
+    </item>
+    <!-- Inner circle -->
+    <item
+        android:left="12dp"
+        android:top="12dp"
+        android:right="12dp"
+        android:bottom="12dp">
+        <shape android:shape="oval">
+            <solid android:color="@color/bolt_card" />
+            <stroke
+                android:width="2dp"
+                android:color="@color/bolt_border" />
+        </shape>
+    </item>
+</layer-list>
