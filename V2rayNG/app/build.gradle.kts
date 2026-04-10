@@ -9,11 +9,11 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.v2ray.ang"
+        applicationId = "com.boltvpn.app"
         minSdk = 24
         targetSdk = 36
-        versionCode = 718
-        versionName = "2.0.18"
+        versionCode = 1
+        versionName = "1.0.0"
         multiDexEnabled = true
 
         val abiFilterList = (properties["ABI_FILTERS"] as? String)?.split(';')
