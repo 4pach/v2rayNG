@@ -77,4 +77,14 @@
         <item name="colorPrimary">@color/color_fab_active</item>
     </style>
 
+    <!-- BoltVPN: Active indicator for bottom nav tabs -->
+    <style name="BoltActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">#1500d4ff</item>
+        <item name="shapeAppearanceOverlay">@style/BoltActiveIndicatorShape</item>
+    </style>
+
+    <style name="BoltActiveIndicatorShape" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>

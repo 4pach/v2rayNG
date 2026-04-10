@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pencil: 4-layer gradient background for Home screen -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Layer 1: Linear gradient 180° -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="180"
+                android:startColor="#0d1530"
+                android:centerColor="#0f1a3d"
+                android:endColor="#0d1530" />
+        </shape>
+    </item>
+    <!-- Layer 2: Radial glow top center (simulated) -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="400dp"
+                android:centerX="0.5"
+                android:centerY="0.35"
+                android:startColor="#4000d4ff"
+                android:endColor="#0000d4ff" />
+        </shape>
+    </item>
+    <!-- Layer 3: Radial glow bottom-left -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="300dp"
+                android:centerX="0.2"
+                android:centerY="0.8"
+                android:startColor="#1f0088aa"
+                android:endColor="#000088aa" />
+        </shape>
+    </item>
+</layer-list>

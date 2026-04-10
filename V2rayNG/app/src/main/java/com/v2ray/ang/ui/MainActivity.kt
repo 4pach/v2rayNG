@@ -197,11 +197,11 @@ class MainActivity : HelperBaseActivity() {
             binding.layoutEncryption.isVisible = false
 
             // Reset stats
-            binding.tvSpeedDown.text = "0"
-            binding.tvSpeedUp.text = "0"
+            binding.tvSpeedDown.text = "— Мб/с"
+            binding.tvSpeedUp.text = "— Мб/с"
             binding.tvTimer.text = "00:00"
-            binding.tvTrafficDown.text = "0 B"
-            binding.tvTrafficUp.text = "0 B"
+            binding.tvTrafficDown.text = "0 MB"
+            binding.tvTrafficUp.text = "0 MB"
 
             setTestState(getString(R.string.connection_not_connected))
         }

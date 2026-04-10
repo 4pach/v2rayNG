@@ -1,36 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- BoltVPN: Connect button — disconnected state
-     Outer glow ring (dim gold) + inner dark gradient circle -->
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Outer glow ring -->
-    <item>
-        <shape android:shape="oval">
-            <stroke
-                android:width="2dp"
-                android:color="#40d4af37" />
-            <solid android:color="@android:color/transparent" />
-            <size
-                android:width="190dp"
-                android:height="190dp" />
-        </shape>
-    </item>
-    <!-- Inner circle with gradient -->
-    <item
-        android:left="14dp"
-        android:top="14dp"
-        android:right="14dp"
-        android:bottom="14dp">
-        <shape android:shape="oval">
-            <gradient
-                android:type="radial"
-                android:gradientRadius="85dp"
-                android:centerX="0.5"
-                android:centerY="0.4"
-                android:startColor="#152035"
-                android:endColor="#0f1629" />
-            <stroke
-                android:width="1dp"
-                android:color="@color/bolt_border" />
-        </shape>
-    </item>
-</layer-list>
+<!-- Pencil: Connect Glow Ring — outer ring 190x190, cornerRadius 95
+     fill #0a0a1a, stroke gradient, shadow blur 60+120 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="#0a0a1a" />
+    <stroke
+        android:width="2dp"
+        android:color="#8000d4ff" />
+    <size
+        android:width="190dp"
+        android:height="190dp" />
+</shape>

@@ -1,114 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- BoltVPN: Main screen layout — cyberpunk design
-     Replaced old DrawerLayout + ViewPager + FAB layout
-     New: Connect button + Server selector + Stats + Tab Bar -->
-<androidx.constraintlayout.widget.ConstraintLayout
+<!-- BoltVPN Home — реализация по ТОЧНЫМ specs из boltvpn-screens.pen -->
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bolt_bg"
+    android:background="@drawable/bolt_home_bg"
     android:fitsSystemWindows="true">
 
-    <!-- ====== SCROLLABLE CONTENT ====== -->
-    <ScrollView
-        android:id="@+id/scroll_content"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:fillViewport="true"
-        android:scrollbars="none"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottom_nav"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+    <!-- CyberParticles: scattered text elements (absolute positioned) -->
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="0x" android:textColor="#1200d4ff" android:fontFamily="@font/jetbrains_mono"
+        android:textSize="10sp" android:layout_marginStart="20dp" android:layout_marginTop="120dp" />
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="ssh" android:textColor="#1000d4ff" android:fontFamily="@font/jetbrains_mono"
+        android:textSize="9sp" android:layout_marginStart="340dp" android:layout_marginTop="200dp" />
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="⚡" android:textColor="#1500d4ff" android:fontFamily="@font/inter"
+        android:textSize="12sp" android:layout_marginStart="60dp" android:layout_marginTop="350dp" />
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="vpn" android:textColor="#0D00d4ff" android:fontFamily="@font/jetbrains_mono"
+        android:textSize="8sp" android:layout_marginStart="300dp" android:layout_marginTop="450dp" />
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="443" android:textColor="#1000d4ff" android:fontFamily="@font/jetbrains_mono"
+        android:textSize="10sp" android:layout_marginStart="50dp" android:layout_marginTop="550dp" />
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="tls" android:textColor="#0D00d4ff" android:fontFamily="@font/jetbrains_mono"
+        android:textSize="9sp" android:layout_marginStart="350dp" android:layout_marginTop="650dp" />
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="&gt;_" android:textColor="#1000d4ff" android:fontFamily="@font/jetbrains_mono"
+        android:textSize="11sp" android:layout_marginStart="180dp" android:layout_marginTop="150dp" />
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="{}" android:textColor="#0D00d4ff" android:fontFamily="@font/jetbrains_mono"
+        android:textSize="10sp" android:layout_marginStart="280dp" android:layout_marginTop="320dp" />
 
+    <!-- Main content: vertical, aligned bottom, padding [0,24,20,24] -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal|bottom"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="0dp">
+
+        <!-- Logo Row: icon 40dp + "Bolt VPN" Inter 26sp Bold -->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/layout_logo"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal"
-            android:paddingHorizontal="20dp"
-            android:paddingTop="16dp"
-            android:paddingBottom="24dp">
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
 
-            <!-- ====== 1. LOGO ====== -->
-            <LinearLayout
-                android:id="@+id/layout_logo"
+            <ImageView
+                android:id="@+id/iv_logo"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/bolt_logo"
+                android:contentDescription="@string/app_name" />
+
+            <TextView
+                android:id="@+id/tv_logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="8dp">
+                android:layout_marginStart="10dp"
+                android:text="@string/app_name"
+                android:textColor="#d0dce8"
+                android:textSize="26sp"
+                android:fontFamily="@font/inter"
+                android:textStyle="bold"
+                android:letterSpacing="-0.01" />
+        </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/iv_logo"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:src="@drawable/bolt_logo"
-                    android:contentDescription="@string/app_name" />
+        <!-- Connect Glow Ring: 190x190 -->
+        <FrameLayout
+            android:id="@+id/btn_connect"
+            android:layout_width="190dp"
+            android:layout_height="190dp"
+            android:layout_marginBottom="20dp"
+            android:elevation="12dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="@string/bolt_connect"
+            android:background="@drawable/bolt_connect_button_bg">
 
-                <TextView
-                    android:id="@+id/tv_logo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="@string/app_name"
-                    android:textColor="@color/bolt_text"
-                    android:textSize="22sp"
-                    android:fontFamily="@font/inter"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.05" />
-            </LinearLayout>
-
-            <!-- ====== MAP CONTAINER (future: dotted world map background) ====== -->
+            <!-- Inner button: 160x160, cornerRadius 80 -->
             <FrameLayout
-                android:id="@+id/map_container"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0"
-                android:visibility="gone" />
-
-            <!-- ====== 2. IP STATUS & SECURITY ====== -->
-            <LinearLayout
-                android:id="@+id/layout_ip_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="20dp">
-
-                <ImageView
-                    android:id="@+id/iv_lock"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/ic_lock_open"
-                    android:contentDescription="@string/bolt_traffic_unprotected" />
-
-                <TextView
-                    android:id="@+id/tv_ip_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:text="@string/bolt_traffic_unprotected"
-                    android:textColor="@color/bolt_text_dim"
-                    android:textSize="13sp"
-                    android:fontFamily="@font/jetbrains_mono" />
-            </LinearLayout>
-
-            <!-- ====== 3. CONNECT BUTTON ====== -->
-            <FrameLayout
-                android:id="@+id/btn_connect"
-                android:layout_width="190dp"
-                android:layout_height="190dp"
-                android:layout_marginBottom="8dp"
-                android:elevation="8dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:contentDescription="@string/bolt_connect"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:background="@drawable/bolt_connect_button_bg">
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bolt_connect_inner">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -119,8 +103,8 @@
 
                     <ImageView
                         android:id="@+id/iv_power"
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
                         android:src="@drawable/ic_power_bolt"
                         android:contentDescription="@string/bolt_connect" />
 
@@ -128,343 +112,340 @@
                         android:id="@+id/tv_connect_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="6dp"
                         android:text="@string/bolt_connect"
-                        android:textColor="@color/bolt_text_dim"
+                        android:textColor="#7a9aaa"
                         android:textSize="11sp"
                         android:fontFamily="@font/inter"
                         android:textStyle="bold"
                         android:letterSpacing="0.15" />
                 </LinearLayout>
             </FrameLayout>
+        </FrameLayout>
 
-            <!-- ====== 4. CONNECTION STATUS ====== -->
+        <!-- Server Selector: width 320dp, height 58dp, cornerRadius 14 -->
+        <FrameLayout
+            android:id="@+id/layout_server"
+            android:layout_width="320dp"
+            android:layout_height="58dp"
+            android:layout_marginBottom="20dp"
+            android:elevation="4dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:background="@drawable/bolt_server_selector_bg">
+
             <LinearLayout
-                android:id="@+id/layout_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="24dp">
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp">
 
-                <View
-                    android:id="@+id/view_status_dot"
-                    android:layout_width="8dp"
-                    android:layout_height="8dp"
-                    android:background="@drawable/bolt_status_dot_gray" />
-
-                <TextView
-                    android:id="@+id/tv_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="@string/bolt_status_disconnected"
-                    android:textColor="@color/bolt_text_dim"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/inter" />
-            </LinearLayout>
-
-            <!-- ====== 5. SERVER SELECTOR ====== -->
-            <FrameLayout
-                android:id="@+id/layout_server"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground"
-                android:background="@drawable/bolt_card_neon_bg">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:padding="16dp">
+                <!-- Flag in circle -->
+                <FrameLayout
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:background="@drawable/bolt_flag_circle_bg">
 
                     <ImageView
                         android:id="@+id/iv_server_flag"
-                        android:layout_width="32dp"
-                        android:layout_height="24dp"
-                        android:scaleType="fitCenter"
-                        android:contentDescription="@string/bolt_select_server"
-                        tools:src="@mipmap/ic_launcher" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="12dp">
-
-                        <TextView
-                            android:id="@+id/tv_server_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/bolt_select_server"
-                            android:textColor="@color/bolt_text"
-                            android:textSize="15sp"
-                            android:fontFamily="@font/inter"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tv_server_ping"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:textColor="@color/bolt_text_dim"
-                            android:textSize="12sp"
-                            android:fontFamily="@font/jetbrains_mono"
-                            tools:text="48 ms • 120 Мбит/с" />
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/iv_signal"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginEnd="8dp"
-                        android:src="@drawable/ic_signal_bars"
-                        android:contentDescription="@string/bolt_select_server" />
-
-                    <ImageView
                         android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_chevron_right"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:scaleType="fitCenter"
                         android:contentDescription="@string/bolt_select_server" />
-                </LinearLayout>
-            </FrameLayout>
+                </FrameLayout>
 
-            <!-- ====== 6. STATS — 3 cards in a row ====== -->
-            <LinearLayout
-                android:id="@+id/layout_stats"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="12dp"
-                android:baselineAligned="false">
-
-                <!-- Download speed -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginEnd="6dp"
                     android:orientation="vertical"
-                    android:gravity="center"
-                    android:background="@drawable/bolt_card_bg"
-                    android:padding="12dp">
+                    android:layout_marginStart="12dp">
 
                     <TextView
+                        android:id="@+id/tv_server_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/bolt_speed_down"
-                        android:textColor="@color/bolt_text_dim"
-                        android:textSize="11sp" />
+                        android:text="@string/bolt_select_server"
+                        android:textColor="#d0dce8"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/inter"
+                        android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_speed_down"
+                        android:id="@+id/tv_server_ping"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="0"
-                        android:textColor="@color/bolt_neon"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:fontFamily="@font/jetbrains_mono" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Мб/с"
-                        android:textColor="@color/bolt_text_dim"
-                        android:textSize="10sp" />
+                        android:layout_marginTop="2dp"
+                        android:textColor="#8000d4ff"
+                        android:textSize="10sp"
+                        android:fontFamily="@font/inter"
+                        tools:text="48 ms  •  120 Мбит/с" />
                 </LinearLayout>
 
-                <!-- Upload speed -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginHorizontal="3dp"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:background="@drawable/bolt_card_bg"
-                    android:padding="12dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/bolt_speed_up"
-                        android:textColor="@color/bolt_text_dim"
-                        android:textSize="11sp" />
-
-                    <TextView
-                        android:id="@+id/tv_speed_up"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="0"
-                        android:textColor="@color/bolt_neon"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:fontFamily="@font/jetbrains_mono" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Мб/с"
-                        android:textColor="@color/bolt_text_dim"
-                        android:textSize="10sp" />
-                </LinearLayout>
-
-                <!-- Session timer -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="6dp"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:background="@drawable/bolt_card_bg"
-                    android:padding="12dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/bolt_session_time"
-                        android:textColor="@color/bolt_text_dim"
-                        android:textSize="11sp" />
-
-                    <TextView
-                        android:id="@+id/tv_timer"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="00:00"
-                        android:textColor="@color/bolt_neon"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:fontFamily="@font/jetbrains_mono" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" "
-                        android:textSize="10sp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <!-- ====== 7. TRAFFIC TOTALS ====== -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="12dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="↓ "
-                    android:textColor="@color/bolt_text_dim"
-                    android:textSize="12sp"
-                    android:fontFamily="@font/jetbrains_mono" />
-
-                <TextView
-                    android:id="@+id/tv_traffic_down"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0 B"
-                    android:textColor="@color/bolt_text_dim"
-                    android:textSize="12sp"
-                    android:fontFamily="@font/jetbrains_mono" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="  /  ↑ "
-                    android:textColor="@color/bolt_text_dim"
-                    android:textSize="12sp"
-                    android:fontFamily="@font/jetbrains_mono" />
-
-                <TextView
-                    android:id="@+id/tv_traffic_up"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0 B"
-                    android:textColor="@color/bolt_text_dim"
-                    android:textSize="12sp"
-                    android:fontFamily="@font/jetbrains_mono" />
-            </LinearLayout>
-
-            <!-- ====== 8. ENCRYPTION INDICATOR ====== -->
-            <LinearLayout
-                android:id="@+id/layout_encryption"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:visibility="gone"
-                tools:visibility="visible">
-
+                <!-- Signal icon (lucide:signal in Pencil) -->
                 <ImageView
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
-                    android:src="@drawable/ic_lock_closed"
-                    android:contentDescription="@string/bolt_traffic_encrypted" />
-
-                <TextView
-                    android:id="@+id/tv_encryption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:text="@string/bolt_encryption_label"
-                    android:textColor="@color/bolt_green"
-                    android:textSize="12sp"
-                    android:fontFamily="@font/jetbrains_mono" />
+                    android:id="@+id/iv_signal"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_signal_bars"
+                    android:contentDescription="@string/bolt_select_server" />
             </LinearLayout>
+        </FrameLayout>
 
-            <!-- ====== 9. PROGRESS BAR (connection) ====== -->
-            <com.google.android.material.progressindicator.LinearProgressIndicator
-                android:id="@+id/progress_bar"
-                android:layout_width="match_parent"
+        <!-- Status Row: dot + text -->
+        <LinearLayout
+            android:id="@+id/layout_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
+
+            <View
+                android:id="@+id/view_status_dot"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="@drawable/bolt_status_dot_gray" />
+
+            <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:indeterminate="true"
-                android:visibility="invisible"
-                app:indicatorColor="@color/bolt_neon"
-                app:trackColor="@color/bolt_card" />
-
-            <!-- ====== 10. TEST STATE (legacy, hidden — needed for binding compatibility) ====== -->
-            <LinearLayout
-                android:id="@+id/layout_test"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <TextView
-                    android:id="@+id/tv_test_state"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/connection_test_pending" />
-            </LinearLayout>
-
+                android:layout_marginStart="8dp"
+                android:text="@string/bolt_status_disconnected"
+                android:textColor="#7a9aaa"
+                android:textSize="13sp"
+                android:fontFamily="@font/inter" />
         </LinearLayout>
-    </ScrollView>
 
-    <!-- ====== BOTTOM NAVIGATION ====== -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_nav"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bolt_bottom_nav_bg"
-        app:itemIconTint="@color/bolt_text_dim"
-        app:itemTextColor="@color/bolt_text_dim"
-        app:labelVisibilityMode="labeled"
-        app:menu="@menu/menu_bottom_nav"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <!-- Stats Row: 3 cards, gap 10, width 320, height 62 each -->
+        <LinearLayout
+            android:id="@+id/layout_stats"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp"
+            android:baselineAligned="false">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <!-- Download speed -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="62dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="5dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/bolt_stat_card_bg">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="↓"
+                    android:textColor="@color/bolt_neon"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_speed_down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="— Мб/с"
+                    android:textColor="#d0dce8"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/inter"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Upload speed -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="62dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="5dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/bolt_stat_card_bg">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="↑"
+                    android:textColor="@color/bolt_neon"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_speed_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="— Мб/с"
+                    android:textColor="#d0dce8"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/inter"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Timer -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="62dp"
+                android:layout_weight="1"
+                android:layout_marginStart="5dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/bolt_stat_card_bg">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⏱"
+                    android:textColor="@color/bolt_neon"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_timer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00:00"
+                    android:textColor="#d0dce8"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/inter"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Session Traffic: width 320, height 44, cornerRadius 12 -->
+        <LinearLayout
+            android:id="@+id/layout_traffic"
+            android:layout_width="320dp"
+            android:layout_height="44dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bolt_traffic_bg">
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="↓ " android:textColor="@color/bolt_neon" android:textSize="12sp" />
+            <TextView android:id="@+id/tv_traffic_down" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="0 MB" android:textColor="@color/bolt_neon" android:textSize="12sp"
+                android:fontFamily="@font/jetbrains_mono" android:textStyle="bold" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="  /  " android:textColor="#407a9aaa" android:textSize="12sp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="↑ " android:textColor="@color/bolt_green" android:textSize="12sp" />
+            <TextView android:id="@+id/tv_traffic_up" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="0 MB" android:textColor="@color/bolt_green" android:textSize="12sp"
+                android:fontFamily="@font/jetbrains_mono" android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- IP Status -->
+        <LinearLayout
+            android:id="@+id/layout_ip_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
+
+            <ImageView
+                android:id="@+id/iv_lock"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@drawable/ic_lock_open"
+                android:contentDescription="@string/bolt_traffic_unprotected" />
+
+            <TextView
+                android:id="@+id/tv_ip_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:text="@string/bolt_traffic_unprotected"
+                android:textColor="#90ff4466"
+                android:textSize="11sp"
+                android:fontFamily="@font/jetbrains_mono" />
+        </LinearLayout>
+
+        <!-- Encryption Badge: cornerRadius 20, fill #00ff8810, stroke #00ff8820, width 320 -->
+        <LinearLayout
+            android:id="@+id/layout_encryption"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bolt_encryption_badge_bg"
+            android:padding="6dp"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:src="@drawable/ic_lock_closed"
+                android:contentDescription="@string/bolt_traffic_encrypted" />
+
+            <TextView
+                android:id="@+id/tv_encryption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:text="@string/bolt_encryption_label"
+                android:textColor="@color/bolt_green"
+                android:textSize="10sp"
+                android:fontFamily="@font/inter" />
+        </LinearLayout>
+
+        <!-- Hidden: legacy test state + progress bar -->
+        <LinearLayout
+            android:id="@+id/layout_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <TextView android:id="@+id/tv_test_state" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:text="@string/connection_test_pending" />
+        </LinearLayout>
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="invisible"
+            app:indicatorColor="@color/bolt_neon"
+            app:trackColor="#0f1629" />
+
+        <!-- Tab Bar: pill shape, cornerRadius 30, height 60 -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="16dp">
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottom_nav"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/bolt_tab_bar_bg"
+                android:elevation="4dp"
+                app:itemIconTint="@color/bolt_text_dim"
+                app:itemTextColor="@color/bolt_text_dim"
+                app:itemActiveIndicatorStyle="@style/BoltActiveIndicator"
+                app:labelVisibilityMode="labeled"
+                app:menu="@menu/menu_bottom_nav" />
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <!-- Map container for future world map overlay -->
+    <FrameLayout
+        android:id="@+id/map_container"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_marginTop="60dp"
+        android:visibility="gone" />
+
+</FrameLayout>

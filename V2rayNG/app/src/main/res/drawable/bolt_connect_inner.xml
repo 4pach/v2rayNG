@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pencil: Inner button 160x160, cornerRadius 80
+     Radial gradient #0a1a30 → #001525, stroke gradient -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <gradient
+        android:type="radial"
+        android:gradientRadius="80dp"
+        android:centerX="0.5"
+        android:centerY="0.5"
+        android:startColor="#0a1a30"
+        android:endColor="#001525" />
+    <stroke
+        android:width="2dp"
+        android:color="#AA00d4ff" />
+    <size
+        android:width="160dp"
+        android:height="160dp" />
+</shape>
