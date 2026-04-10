@@ -70,18 +70,8 @@
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
-        <activity
-            android:name=".ui.ServerActivity"
-            android:exported="false"
-            android:windowSoftInputMode="stateUnchanged" />
-        <activity
-            android:name=".ui.ServerCustomConfigActivity"
-            android:exported="false"
-            android:windowSoftInputMode="stateUnchanged" />
-        <activity
-            android:name=".ui.ServerGroupActivity"
-            android:exported="false"
-            android:windowSoftInputMode="stateUnchanged" />
+        <!-- BoltVPN: ServerActivity, ServerCustomConfigActivity, ServerGroupActivity removed — users don't edit configs -->
+
         <activity
             android:name=".ui.SettingsActivity"
             android:exported="false" />
@@ -94,25 +84,13 @@
         <activity
             android:name=".ui.LogcatActivity"
             android:exported="false" />
-        <activity
-            android:name=".ui.RoutingSettingActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.RoutingEditActivity"
-            android:exported="false" />
+        <!-- BoltVPN: RoutingSettingActivity, RoutingEditActivity removed — no manual routing -->
+
         <activity
             android:name=".ui.SubSettingActivity"
             android:exported="false" />
-        <activity
-            android:name=".ui.UserAssetActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.UserAssetUrlActivity"
-            android:exported="false" />
+        <!-- BoltVPN: UserAssetActivity, UserAssetUrlActivity, SubEditActivity removed — automatic -->
 
-        <activity
-            android:name=".ui.SubEditActivity"
-            android:exported="false" />
         <activity
             android:name=".ui.ScScannerActivity"
             android:exported="false" />
@@ -137,17 +115,14 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:scheme="v2rayng" />
+                <data android:scheme="boltvpn" />
                 <data android:host="install-config" />
                 <data android:host="install-sub" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.CheckUpdateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.BackupActivity"
-            android:exported="false" />
+        <!-- BoltVPN: CheckUpdateActivity removed — updates via Google Play -->
+        <!-- BoltVPN: BackupActivity removed — not needed for MVP -->
+
         <activity
             android:name=".ui.AboutActivity"
             android:exported="false" />
@@ -225,26 +200,8 @@
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                 android:value="tile" />
         </service>
-        <!-- =====================Tasker===================== -->
-        <activity
-            android:name=".ui.TaskerActivity"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher">
-            <intent-filter>
-                <action android:name="com.twofortyfouram.locale.intent.action.EDIT_SETTING" />
-            </intent-filter>
-        </activity>
+        <!-- BoltVPN: TaskerActivity + TaskerReceiver removed -->
 
-        <receiver
-            android:name=".receiver.TaskerReceiver"
-            android:exported="true"
-            android:process=":RunSoLibV2RayDaemon"
-            tools:ignore="ExportedReceiver">
-            <intent-filter>
-                <action android:name="com.twofortyfouram.locale.intent.action.FIRE_SETTING" />
-            </intent-filter>
-        </receiver>
-        <!-- =====================Tasker===================== -->
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
